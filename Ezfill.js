@@ -1,93 +1,131 @@
-//this script will Ez Fill forms on the truefiling website when filing lawsuits.  Save time on constantly adding the same information over an over with the just the click of a button.  The function below can be pasted in the consoleLog of browser dev toosl to invoke.  Will update code to work as a browser extension.
-function myAutoFill(provider){
 
-    //party section
-    let entityName =  document.querySelector('[ng-model="party.entityName"]');
-    let partyAddress =  document.querySelector('[ng-model="party.address"]');
-    let partyCity =  document.querySelector('[ng-model="party.city"]');
-    let partyState =  document.querySelector('[ng-model="party.state"]'); //set this value to "string:Michigan"
-    let partyZip =  document.querySelector('[ng-model="party.zip"]');
-    let hasAttorney =  document.querySelector('[ng-model="party.selfRepresented"]');//set this value to false
-    
-    const entity = [entityName, partyAddress, partyCity, partyZip, partyState, hasAttorney ]
-
-    //attorney section
-    let lastName =  document.querySelector('[ng-model="attorney.lastName"]');
-    let firstName =  document.querySelector('[ng-model="attorney.firstName"]');
-    let barNumber =  document.querySelector('[ng-model="attorney.number"]');
-    let jurisdiction =  document.querySelector('[ng-model="attorney.jurisdiction"]');
-    let email =  document.querySelector('[ng-model="attorney.email"]');
-    let attorneyAddress =  document.querySelector('[ng-model="attorney.address"]');
-    let attorneyCity =  document.querySelector('[ng-model="attorney.city"]');
-    let attorneyState =  document.querySelector('[ng-model="attorney.state"]');
-    let attorneyZip =  document.querySelector('[ng-model="attorney.zip"]');
-    let attorneyPhone =  document.querySelector('[ng-model="attorney.phone"]');
-
-    let claimAmount = document.querySelector('[ng-model="model.claimAmount"]');
-
-    //Autofill party Information
-
-    if (provider == 'medivan'){
-        
-        entityName.value = "Medivan LLC"
-        partyAddress.value = "520 Beaver"
-        partyCity.value = 'Royal Oak'
-        partyState.value  = "string:Michigan"
-        partyZip.value = '48073'
-        hasAttorney.value = false
-
-        let event = new Event('change')
-        entity.forEach(element=>{
-            element.classList.remove("ng-empty")
-            element.classList.remove("ng-pristine")
-            element.classList.remove("ng-untouched")
-            element.classList.add("g-not-empty")
-            element.classList.add("ng-dirty")
-            element.classList.add("ng-valid-parse")
-            element.classList.add("ng-touched")
-            element.dispatchEvent(event);
-
-        })
-
-    }
-    
-    if (provider == 'labser'){
-
-        entityName.value = "Labser LLC"
-        partyAddress.value = "14501 Telegraph Road, Suite 201"
-        partyCity.value = 'Redford'
-        partyState.value  = "string:Michigan"
-        partyState.classList.remove("ng-empty")
-        partyState.classList.add("g-not-empty")
-        partyZip.value = '48239'
-        attorney.value = false
-    }
-
-    //Autofill Attorney Section
-    lastName.value = 'Rizzo'
-    firstName.value = 'Ryanne'
-    barNumber.value  = 'P83838'
-   // jurisdiction.value  = 'string:Michigan';
-   email.value = "rrizzo@lathamlawgroup.com"
-   attorneyAddress.value = '346 Park Street, Suite 130'
-   attorneyCity.value = 'Birmingham'
-   attorneyState.value = 'string:Michigan'
-   attorneyState.classList.remove("ng-empty")
-   attorneyState.classList.add("g-not-empty")
-   attorneyZip.value = '48009'
-   attorneyPhone.value = '(248) 210-8735'
- //  claimAmount.value = balance
-
-}
-
+//this function will insert the form fields based on provider
 document.addEventListener('DOMContentLoaded', function () {
     const fillButton = document.getElementById("autofill");
-    
-    fillButton.addEventListener('click', function () {
-        myAutoFill('medivan')
+    const providerList = document.getElementById('provider');     
+    let party = providerList.value;
+    const balanceField = document.getElementById('balance')
+    let balance  = balanceField.value;
+
+    balanceField.addEventListener('change', function (){
+        balance = balanceField.value;
+    });
+    providerList.addEventListener('change', function(){
+    party = providerList.value;
+    console.log(party)
+})
+    fillButton.addEventListener('click', async function () {
+      await chrome.scripting.executeScript({
+        target: { tabId: await getCurrentTabId() },
+        function: myAutoFill,
+        args: [party,balance], 
+      });
     });
 
+    
+
   });
+  
+async function getCurrentTabId() {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tabs[0].id;
+  }
 
+function myAutoFill(provider, balance){
 
+    const theFrame = document.querySelector("#formFrame")
+     
+    if (theFrame){
+
+        const frameDocument = theFrame.contentWindow.document;
+                //party section set form variabled
+                let entityName =  frameDocument.querySelector('[ng-model="party.entityName"]');
+                let partyAddress =  frameDocument.querySelector('[ng-model="party.address"]');
+                let partyCity =  frameDocument.querySelector('[ng-model="party.city"]');
+                let partyState =  frameDocument.querySelector('[ng-model="party.state"]'); //set this value to "string:Michigan"
+                let partyZip =  frameDocument.querySelector('[ng-model="party.zip"]');
+                let hasAttorney =  frameDocument.querySelector('[name="56"]');//set this value to false
+                let isEntity =  frameDocument.querySelector('[name="34"]');//set this value to false
+                
+                const entity = [entityName, partyAddress, partyCity, partyZip, partyState, hasAttorney ]
+                console.log(entityName);
+                //attorney section set attorney form variables
+                let lastName =  frameDocument.querySelector('[ng-model="attorney.lastName"]');
+                let firstName =  frameDocument.querySelector('[ng-model="attorney.firstName"]');
+                let barNumber =  frameDocument.querySelector('[ng-model="attorney.number"]');
+                let jurisdiction =  frameDocument.querySelector('[ng-model="attorney.jurisdiction"]');
+                let email =  frameDocument.querySelector('[ng-model="attorney.email"]');
+                let attorneyAddress =  frameDocument.querySelector('[ng-model="attorney.address"]');
+                let attorneyCity =  frameDocument.querySelector('[ng-model="attorney.city"]');
+                let attorneyState =  frameDocument.querySelector('[ng-model="attorney.state"]');
+                let attorneyZip =  frameDocument.querySelector('[ng-model="attorney.zip"]');
+                let attorneyPhone =  frameDocument.querySelector('[ng-model="attorney.phone"]');
+                const attorney = [lastName, firstName, barNumber, email, attorneyAddress, attorneyCity, attorneyState, attorneyZip, attorneyPhone ];
+                //Claim section
+                let claimAmount = frameDocument.querySelector('[ng-model="model.claimAmount"]');
+                
+                let event = new Event('change') //create new change event to trigger form validation.
+
+            //Autofill party Information
+            
+            switch (provider) {
+                case 'Great Lakes Pharmacy':
+                  console.log('Autofill logic for Great Lakes Pharmacy');
+                  break;
+                case 'Medivan':
+                    entityName.value = "Medivan LLC"
+                    partyAddress.value = "520 Beaver"
+                    partyCity.value = 'Royal Oak'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48073'
+                    hasAttorney.click()
+                    isEntity.click();
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                  
+                    break;
+                case 'Labser':
+                    entityName.value = "Labser LLC"
+                    partyAddress.value = "14501 Telegraph Road, Suite 201"
+                    partyCity.value = 'Redford'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48239'
+                    hasAttorney.click()
+                    isEntity.click();
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
+                // Add cases for other providers
+                default:
+                  console.log('No autofill logic defined for the selected provider');
+                  alert('Please select provider!').
+                  break;
+              }
+            
+
+            //Autofill Attorney Section
+                lastName.value = 'Rizzo'
+                firstName.value = 'Ryanne'
+                barNumber.value  = 'P83838'
+            // jurisdiction.value  = 'string:Michigan';
+                email.value = "rrizzo@lathamlawgroup.com"
+                attorneyAddress.value = '346 Park Street, Suite 130'
+                attorneyCity.value = 'Birmingham'
+                attorneyState.value = 'string:Michigan'
+                attorneyZip.value = '48009'
+                attorneyPhone.value = '(248) 210-8735'
+                attorney.forEach(element=>{
+                    element.dispatchEvent(event);
+                })    
+                  claimAmount.value = balance
+    }
+        
+}
+      
+
+    
+    
 

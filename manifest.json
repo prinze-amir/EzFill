@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "AutoFill",
+    "name": "eZFill",
     "version": "1.0",
     "description": "Extension to auto fill forms on Michigan true filing website for filing lawsuits",
     "permissions": ["scripting", "activeTab"],
