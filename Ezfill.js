@@ -80,5 +80,14 @@ function myAutoFill(provider){
 
 }
 
-myAutoFill('medivan')
+document.addEventListener('DOMContentLoaded', function () {
+    const fillButton = document.getElementById("autofill");
+    
+    fillButton.addEventListener('click', function () {
+        myAutoFill('medivan')
+    });
+
+  });
+
+
 
