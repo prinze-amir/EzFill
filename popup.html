@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" >
+  </head>
+  <body>
+    <h2>eZFill</h2>
+    <h4>This will auto fill the form with party details for the 37th District Filings.</h4>
+    <div class="form">
+      <label for="provider">Select Provider:</label>
+    <select id="provider">
+      <option value="">-- Select Provider --</option>
+      <option value="Great Lakes Pharmacy">Great Lakes Pharmacy</option>
+      <option value="Medivan">Medivan</option>
+      <option value="Labser">Labser</option>
+      <option value="Aquatics">Aquatics</option>
+      <option value="Biddle Pharmacy">Biddle Pharmacy</option>
+      <option value="Northland Radiology">Northland Radiology</option>
+      <option value="US Rehab">US Rehab</option>
+      <option value="Great Lakes Advocates">Great Lakes Advocates</option>
+      <option value="Auro Rehab">Auro Rehab</option>
+    </select>
+    <label>Insurance Company:</label><input type="text" name="insurance">
+    <label>Balance:</label><input type="number" name="balance" id="balance">
+    </div>
+    
+    <button id="autofill">AutoFill</button>
+    <p>To add atorney details to Circuit Court filing details click button below.</p>
+    <button id="attorneyinfo" disabled >Add Attorney</button>
+  </body>
+  <footer>   
+    <!-- <script src="popup.js"></script> -->
+    <script src="EzFill.js"></script>
+ 
+  </footer>
+</html>

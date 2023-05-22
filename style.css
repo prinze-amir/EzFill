@@ -1,0 +1,39 @@
+body{
+    width:300px;
+    padding:10px;
+}
+button {
+    background-color: rgb(18, 193, 193);
+    color:#fff;
+    padding:10px;
+    border-radius:15px;
+    border:none;
+
+}
+
+button:active{
+    background-color: rgb(8, 59, 59);
+    padding:8px;
+
+}
+button:hover{
+    background-color: rgb(80, 218, 218);
+
+}
+input{
+    border-radius:5px;
+    padding:5px;
+    border:1px solid #dddd;
+    margin: 5px 0;
+}
+select{
+    border-radius:5px;
+    padding:5px;
+    border:1px solid #dddd;
+    margin: 5px 0;
+}
+.form {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
