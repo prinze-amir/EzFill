@@ -120,7 +120,12 @@ function myAutoFill(provider, balance){
                 attorney.forEach(element=>{
                     element.dispatchEvent(event);
                 })    
-                  claimAmount.value = balance
+                if (claimAmount){
+
+                  claimAmount.value = balance;
+                  claimAmount.dispatchEvent(event)
+
+                }  
     }
         
 }
