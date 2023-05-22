@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Truefile AutoFill",
+    "version": "1.0",
+    "description": "Extension to auto fill forms on Michigan true filing website for filing lawsuits",
+    "permissions": ["scripting", "activeTab"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "host_permissions": [
+      "*://*/*"
+    ]
+    
+  }
+  
