@@ -2,13 +2,20 @@
 //this function will insert the form fields based on provider
 document.addEventListener('DOMContentLoaded', function () {
     const fillButton = document.getElementById("autofill");
+    const new37th = document.getElementById("newCase37th");
+    const new3rd = document.getElementById("newCase3rd");
     const providerList = document.getElementById('provider');     
+    const balanceField = document.getElementById('balance');
+    const insurance = document.getElementById('insurance');
+   // const balance  = balanceField.value;
     let party = providerList.value;
-    const balanceField = document.getElementById('balance')
-    let balance  = balanceField.value;
+
 
     balanceField.addEventListener('change', function (){
         balance = balanceField.value;
+    });
+    insurance.addEventListener('change', function (){
+        defendant = insurance.value;
     });
     providerList.addEventListener('change', function(){
     party = providerList.value;
@@ -18,7 +25,23 @@ document.addEventListener('DOMContentLoaded', function () {
       await chrome.scripting.executeScript({
         target: { tabId: await getCurrentTabId() },
         function: myAutoFill,
-        args: [party,balance], 
+        args: [party,balance, defendant], 
+      });
+    });
+
+    new37th.addEventListener('click', async function () {
+      await chrome.scripting.executeScript({
+        target: { tabId: await getCurrentTabId() },
+        function: newCase,
+        args: ["37th"], 
+      });
+    });
+
+    new3rd.addEventListener('click', async function () {
+      await chrome.scripting.executeScript({
+        target: { tabId: await getCurrentTabId() },
+        function: newCase,
+        args: [court], 
       });
     });
 
@@ -31,7 +54,7 @@ async function getCurrentTabId() {
     return tabs[0].id;
   }
 
-function myAutoFill(provider, balance){
+function myAutoFill(provider, balance, defendant){
 
     const theFrame = document.querySelector("#formFrame")
      
@@ -44,11 +67,10 @@ function myAutoFill(provider, balance){
                 let partyCity =  frameDocument.querySelector('[ng-model="party.city"]');
                 let partyState =  frameDocument.querySelector('[ng-model="party.state"]'); //set this value to "string:Michigan"
                 let partyZip =  frameDocument.querySelector('[ng-model="party.zip"]');
-                let hasAttorney =  frameDocument.querySelector('[name="56"]');//set this value to false
-                let isEntity =  frameDocument.querySelector('[name="34"]');//set this value to false
-                
+                let hasAttorney =  frameDocument.querySelector('[name="56"]');
+                let isEntity =  frameDocument.querySelector('[name="34"]');
                 const entity = [entityName, partyAddress, partyCity, partyZip, partyState, hasAttorney ]
-                console.log(entityName);
+
                 //attorney section set attorney form variables
                 let lastName =  frameDocument.querySelector('[ng-model="attorney.lastName"]');
                 let firstName =  frameDocument.querySelector('[ng-model="attorney.firstName"]');
@@ -61,13 +83,22 @@ function myAutoFill(provider, balance){
                 let attorneyZip =  frameDocument.querySelector('[ng-model="attorney.zip"]');
                 let attorneyPhone =  frameDocument.querySelector('[ng-model="attorney.phone"]');
                 const attorney = [lastName, firstName, barNumber, email, attorneyAddress, attorneyCity, attorneyState, attorneyZip, attorneyPhone ];
+
+                //defendant section
+                let isInsurance = frameDocument.querySelector('[name="160"]');
+                let defendantName =  frameDocument.querySelectorAll('[ng-model="party.entityName"]')[1];
+
+
                 //Claim section
                 let claimAmount = frameDocument.querySelector('[ng-model="model.claimAmount"]');
                 
                 let event = new Event('change') //create new change event to trigger form validation.
 
             //Autofill party Information
-            
+
+                    hasAttorney.click()
+                    isEntity.click()
+                    isInsurance.click()
             switch (provider) {
                 case 'Great Lakes Pharmacy':
                   console.log('Autofill logic for Great Lakes Pharmacy');
@@ -78,8 +109,7 @@ function myAutoFill(provider, balance){
                     partyCity.value = 'Royal Oak'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48073'
-                    hasAttorney.click()
-                    isEntity.click();
+                    
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
     
@@ -91,8 +121,18 @@ function myAutoFill(provider, balance){
                     partyCity.value = 'Redford'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48239'
-                    hasAttorney.click()
-                    isEntity.click();
+              
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                case 'Discount':
+                    entityName.value = "Discount Drugs LLC"
+                    partyAddress.value = "19145 Allen Road, Suite 105"
+                    partyCity.value = 'Brownstown'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48183'
+                   
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
     
@@ -119,18 +159,33 @@ function myAutoFill(provider, balance){
                 attorneyPhone.value = '(248) 210-8735'
                 attorney.forEach(element=>{
                     element.dispatchEvent(event);
-                })    
-                if (claimAmount){
+                })
+                
+                //autofill defendant section
+                defendantName.value = defendant;
+                defendantName.dispatchEvent(event);
 
                   claimAmount.value = balance;
                   claimAmount.dispatchEvent(event)
 
-                }  
     }
         
 }
       
+function newCase(court) {
 
+  const newLink  = document.getElementsByClassName('classic-link')[0];
+  newLink.click();
+  const selectCourt = document.getElementById('court_select_dropdown');
+  selectCourt.click();
+  document.getElementsByClassName('dropdown-list-group-header')[1].click()
+
+
+
+  //document.querySelector("#court_select_dropdown").value = 
+
+
+}
     
     
 
