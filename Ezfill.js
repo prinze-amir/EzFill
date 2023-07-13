@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const insurance = document.getElementById('insurance');
    // const balance  = balanceField.value;
     let party = providerList.value;
+    let defendant = insurance.value;
 
 
     balanceField.addEventListener('change', function (){
@@ -100,7 +101,7 @@ function myAutoFill(provider, balance, defendant){
                     isEntity.click()
                     isInsurance.click()
             switch (provider) {
-                case 'Great Lakes Pharmacy':
+                case 'GreatLakesPharmacy':
                   console.log('Autofill logic for Great Lakes Pharmacy');
                   break;
                 case 'Medivan':
@@ -125,9 +126,35 @@ function myAutoFill(provider, balance, defendant){
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
     
-                    });                       
+                    });   
+                    break;
+                    
                 case 'Discount':
                     entityName.value = "Discount Drugs LLC"
+                    partyAddress.value = "19145 Allen Road, Suite 105"
+                    partyCity.value = 'Brownstown'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48183'
+                   
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
+                case 'BiddlePharmacy':
+                    entityName.value = "Biddle Pharmacy"
+                    partyAddress.value = "19145 Allen Road, Suite 105"
+                    partyCity.value = 'Brownstown'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48183'
+                   
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
+                case 'NorthlandRadiology':
+                    entityName.value = "Northland Radiology"
                     partyAddress.value = "19145 Allen Road, Suite 105"
                     partyCity.value = 'Brownstown'
                     partyState.value  = "string:Michigan"
