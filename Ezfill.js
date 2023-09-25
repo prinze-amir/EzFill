@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
       await chrome.scripting.executeScript({
         target: { tabId: await getCurrentTabId() },
         function: newCase,
-        args: [court], 
+        args: ['3rd'], 
       });
     });
 
@@ -159,6 +159,18 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Brownstown'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48183'
+                   
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
+                case 'USRehab':
+                    entityName.value = "US Rehabilitation & Health Services"
+                    partyAddress.value = "13439 E. 14 Mile Road"
+                    partyCity.value = 'Sterling Heights'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48312'
                    
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
