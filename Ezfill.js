@@ -177,6 +177,30 @@ function myAutoFill(provider, balance, defendant){
     
                     });                       
                     break;
+                case 'AuroRehab':
+                    entityName.value = "Auro Rehab Services LLC"
+                    partyAddress.value = "31904 Ryan Road"
+                    partyCity.value = 'Warren'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48092'
+                   
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
+                case 'AccidentVictims':
+                    entityName.value = "Accident Victims Advocates, Inc."
+                    partyAddress.value = "5747 Kilbrennan Road"
+                    partyCity.value = 'Bloomfield Hills'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48301'
+                   
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });                       
+                    break;
                 // Add cases for other providers
                 default:
                   console.log('No autofill logic defined for the selected provider');
