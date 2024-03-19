@@ -128,6 +128,18 @@ function myAutoFill(provider, balance, defendant){
     
                     });   
                     break;
+                case 'Aquatics':
+                    entityName.value = "Labser LLC"
+                    partyAddress.value = "25591 Coolidge Hwy"
+                    partyCity.value = 'Oak Park'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48237'
+              
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+    
+                    });   
+                    break;
                     
                 case 'Discount':
                     entityName.value = "Discount Drugs LLC"
@@ -210,11 +222,11 @@ function myAutoFill(provider, balance, defendant){
             
 
             //Autofill Attorney Section
-                lastName.value = 'Rizzo'
-                firstName.value = 'Ryanne'
-                barNumber.value  = 'P83838'
+                lastName.value = 'Alan'
+                firstName.value = 'Latham'
+                barNumber.value  = 'P77559'
             // jurisdiction.value  = 'string:Michigan';
-                email.value = "rrizzo@lathamlawgroup.com"
+                email.value = "alatham@lathamlawgroup.com"
                 attorneyAddress.value = '346 Park Street, Suite 130'
                 attorneyCity.value = 'Birmingham'
                 attorneyState.value = 'string:Michigan'
