@@ -2,15 +2,15 @@
 //this function will insert the form fields based on provider
 document.addEventListener('DOMContentLoaded', function () {
     const fillButton = document.getElementById("autofill");
-    const new37th = document.getElementById("newCase37th");
-    const new3rd = document.getElementById("newCase3rd");
-    const providerList = document.getElementById('provider');     
+    // const new37th = document.getElementById("newCase37th");
+    // const new3rd = document.getElementById("newCase3rd");
+    const providerList = document.getElementById('provider');
     const balanceField = document.getElementById('balance');
     const insurance = document.getElementById('insurance');
    // const balance  = balanceField.value;
+    const addInfo = document.getElementById('attorneyinfo');
     let party = providerList.value;
     let defendant = insurance.value;
-
 
     balanceField.addEventListener('change', function (){
         balance = balanceField.value;
@@ -22,34 +22,68 @@ document.addEventListener('DOMContentLoaded', function () {
     party = providerList.value;
     console.log(party)
 })
+
+    addInfo.addEventListener('click', async function () {
+        await chrome.scripting.executeScript({
+          target: { tabId: await getCurrentTabId() },
+          function: autoFillInfoUd10,
+        });
+      });
+
     fillButton.addEventListener('click', async function () {
       await chrome.scripting.executeScript({
         target: { tabId: await getCurrentTabId() },
         function: myAutoFill,
-        args: [party,balance, defendant], 
+        args: [party,balance, defendant],
       });
     });
 
-    new37th.addEventListener('click', async function () {
-      await chrome.scripting.executeScript({
-        target: { tabId: await getCurrentTabId() },
-        function: newCase,
-        args: ["37th"], 
-      });
-    });
+    // new37th.addEventListener('click', async function () {
+    //   await chrome.scripting.executeScript({
+    //     target: { tabId: await getCurrentTabId() },
+    //     function: newCase,
+    //     args: ["37th"],
+    //   });
+    // });
 
-    new3rd.addEventListener('click', async function () {
-      await chrome.scripting.executeScript({
-        target: { tabId: await getCurrentTabId() },
-        function: newCase,
-        args: ['3rd'], 
-      });
-    });
+    // new3rd.addEventListener('click', async function () {
+    //   await chrome.scripting.executeScript({
+    //     target: { tabId: await getCurrentTabId() },
+    //     function: newCase,
+    //     args: ['3rd'],
+    //   });
+    // });
 
-    
+
 
   });
-  
+
+  async function autoFillInfoUd10() {
+    const latham = {
+        firstName: 'Alan',
+        lastName: 'Latham',
+        barNumber: 'P77559',
+        email: 'alatham@lathamlawgroup.com',
+        address1: '346 Park Street',
+        address2: 'Suite 130',
+        city: 'Birmingham',
+        state: 'MI',
+        zip: '48009',
+        phone: '(248) 210-8735',
+    }
+    console.log(latham)
+    document.getElementById('ctl00_MainContent_txtBillFirstName').value = latham.firstName;
+    document.getElementById('ctl00_MainContent_txtBillLastName').value = latham.lastName;
+    document.getElementById('ctl00_MainContent_txtBillStreet1').value = latham.address1;
+    document.getElementById('ctl00_MainContent_txtBillStreet2').value = latham.address2;
+    document.getElementById('ctl00_MainContent_txtBillCity').value = latham.city;
+    document.getElementById('ctl00_MainContent_txtBillZip').value = latham.zip;
+    document.getElementById('ctl00_MainContent_lstBillState').value = latham.state;
+    document.getElementById('ctl00_MainContent_txtBillPhone').value = latham.phone;
+    document.getElementById('ctl00_MainContent_txtBillEmail').value = latham.email;
+  }
+
+
 async function getCurrentTabId() {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     return tabs[0].id;
@@ -58,7 +92,7 @@ async function getCurrentTabId() {
 function myAutoFill(provider, balance, defendant){
 
     const theFrame = document.querySelector("#formFrame")
-     
+
     if (theFrame){
 
         const frameDocument = theFrame.contentWindow.document;
@@ -86,13 +120,13 @@ function myAutoFill(provider, balance, defendant){
                 const attorney = [lastName, firstName, barNumber, email, attorneyAddress, attorneyCity, attorneyState, attorneyZip, attorneyPhone ];
 
                 //defendant section
-                let isInsurance = frameDocument.querySelector('[name="160"]');
+                let isInsurance = frameDocument.querySelector('[name="170"]');//changed from 171 to 160
                 let defendantName =  frameDocument.querySelectorAll('[ng-model="party.entityName"]')[1];
 
 
                 //Claim section
                 let claimAmount = frameDocument.querySelector('[ng-model="model.claimAmount"]');
-                
+
                 let event = new Event('change') //create new change event to trigger form validation.
 
             //Autofill party Information
@@ -110,11 +144,23 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Royal Oak'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48073'
-                    
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                  
+
+                    });
+                  break;
+                case 'C&C Medical':
+                    entityName.value = "C&C Medical Equipment LLC"
+                    partyAddress.value = "318 Chippewa"
+                    partyCity.value = 'Clawson'
+                    partyState.value  = "string:Michigan"
+                    partyZip.value = '48017'
+
+                    entity.forEach(element=>{
+                        element.dispatchEvent(event);
+
+                    });
                     break;
                 case 'Labser':
                     entityName.value = "Labser LLC"
@@ -122,11 +168,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Redford'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48239'
-              
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });   
+
+                    });
                     break;
                 case 'Aquatics':
                     entityName.value = "Labser LLC"
@@ -134,24 +180,24 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Oak Park'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48237'
-              
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });   
+
+                    });
                     break;
-                    
+
                 case 'Discount':
                     entityName.value = "Discount Drugs LLC"
                     partyAddress.value = "19145 Allen Road, Suite 105"
                     partyCity.value = 'Brownstown'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48183'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 case 'BiddlePharmacy':
                     entityName.value = "Biddle Pharmacy"
@@ -159,11 +205,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Brownstown'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48183'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 case 'NorthlandRadiology':
                     entityName.value = "Northland Radiology"
@@ -171,11 +217,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Brownstown'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48183'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 case 'USRehab':
                     entityName.value = "US Rehabilitation & Health Services"
@@ -183,11 +229,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Sterling Heights'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48312'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 case 'AuroRehab':
                     entityName.value = "Auro Rehab Services LLC"
@@ -195,11 +241,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Warren'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48092'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 case 'AccidentVictims':
                     entityName.value = "Accident Victims Advocates, Inc."
@@ -207,11 +253,11 @@ function myAutoFill(provider, balance, defendant){
                     partyCity.value = 'Bloomfield Hills'
                     partyState.value  = "string:Michigan"
                     partyZip.value = '48301'
-                   
+
                     entity.forEach(element=>{
                         element.dispatchEvent(event);
-    
-                    });                       
+
+                    });
                     break;
                 // Add cases for other providers
                 default:
@@ -219,7 +265,7 @@ function myAutoFill(provider, balance, defendant){
                   alert('Please select provider!').
                   break;
               }
-            
+
 
             //Autofill Attorney Section
                 lastName.value = 'Alan'
@@ -235,7 +281,7 @@ function myAutoFill(provider, balance, defendant){
                 attorney.forEach(element=>{
                     element.dispatchEvent(event);
                 })
-                
+
                 //autofill defendant section
                 defendantName.value = defendant;
                 defendantName.dispatchEvent(event);
@@ -244,9 +290,9 @@ function myAutoFill(provider, balance, defendant){
                   claimAmount.dispatchEvent(event)
 
     }
-        
+
 }
-      
+
 function newCase(court) {
 
   const newLink  = document.getElementsByClassName('classic-link')[0];
@@ -257,10 +303,10 @@ function newCase(court) {
 
 
 
-  //document.querySelector("#court_select_dropdown").value = 
+  //document.querySelector("#court_select_dropdown").value =
 
 
 }
-    
-    
+
+
 
